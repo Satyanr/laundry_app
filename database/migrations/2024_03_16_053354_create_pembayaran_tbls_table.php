@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('pembayaran_tbls', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->tinyInteger('role')->default(0)->comment('0: Petugas, 1: Pimpinan, 2: Admin');
-            $table->rememberToken();
+            $table->foreignId('id_orders')->constrained('order_tbls')->onDelete('cascade');
+            $table->enum('status_pembayaran', ['lunas', 'belum lunas'])->default('belum lunas');
+            $table->string('uang_bayar')->nullable();
+            $table->string('kembalian')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('pembayaran_tbls');
     }
 };
