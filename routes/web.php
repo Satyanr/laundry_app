@@ -28,7 +28,7 @@ Auth::routes([
     'verify' => false,
 ]);
 
-Route::get('/home', function(){
+Route::get('/home', function () {
     return redirect()->route('transaksi');
 })->name('home');
 
@@ -39,13 +39,15 @@ Route::controller(ImpersonateController::class)->group(function () {
     Route::get('stop-impersonating', 'stopImpersonating')->name('admin.stop-impersonating');
 });
 
-Route::controller(PdfController::class)->group(function (){
+Route::controller(PdfController::class)->group(function () {
     Route::get('orderan', 'orderan')->name('orderan');
 });
 
-Route::controller(Controller::class)->group(function(){
+Route::controller(Controller::class)->group(function () {
     Route::get('/transaksi', 'transaksi')->name('transaksi');
-    Route::get('/pengguna', 'pengguna')->name('pengguna');
-    Route::get('/layanan', 'layanan')->name('layanan');
+    Route::middleware(['auth', 'user-access:Admin'])->group(function () {
+        Route::get('/pengguna', 'pengguna')->name('pengguna');
+        Route::get('/layanan', 'layanan')->name('layanan');
+    });
     Route::get('/konsumen', 'konsumen')->name('konsumen');
 });

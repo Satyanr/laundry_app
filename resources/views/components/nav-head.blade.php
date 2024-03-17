@@ -37,6 +37,11 @@
                                 </ul>
                             </div>
                         </div>
+                        <div class="col d-flex">
+                            <a class="btn btn-outline-light border-0" href="{{ route('layanan') }}">
+                                <i class="fa-solid fa-clipboard-list"></i> <br> Layanan
+                            </a>
+                        </div>
                     @else
                         <div class="col d-flex">
                             <a class="btn btn-outline-light border-0" href="{{ route('logout') }}"
@@ -49,11 +54,7 @@
                             </form>
                         </div>
                     @endif
-                    <div class="col d-flex">
-                        <a class="btn btn-outline-light border-0" href="{{ route('layanan') }}">
-                            <i class="fa-solid fa-clipboard-list"></i> <br> Layanan
-                        </a>
-                    </div>
+
                     @if (session('original_user_id'))
                         <div class="col d-flex">
                             <a class="btn btn-outline-light border-0" href="{{ route('admin.stop-impersonating') }}">
@@ -61,7 +62,7 @@
                             </a>
                         </div>
                     @endif
-                
+
                     <div class="col d-flex me-2" style="margin-left: auto;">
                         <a href="{{ route('konsumen') }}" class="btn btn-outline-light border-0">
                             <div class="row">
