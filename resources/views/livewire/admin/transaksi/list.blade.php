@@ -1,6 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <div class="card">
+            <div class="card-body text-center text-white text-bg-warning">
+                <h3><i class="fa-solid fa-user-clock"></i> <br></h3>
+                <h6>Laundryan Dalam Proses : <br>{{ $orders->where('status', 'proses')->count() }}</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-auto">
+        <div class="card">
+            <div class="card-body text-center text-white text-bg-info">
+                <h3><i class="fa-solid fa-user-check"></i> <br></h3>
+                <h6>Laundryan Belum Diambil : <br>{{ $orders->where('status', 'selesai')->count() }}</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-auto" style="margin-left: auto;">
+        <div class="input-group mt-4">
+            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" class="form-control" placeholder="Cari Laundryan" aria-label="Cari Berdasarkan Kode"
+                aria-describedby="basic-addon1" wire:model='searchorder' wire:input='resetPageOrder'>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col" style="margin-left: auto">
+        <div class="customize-input float-end ms-2">
+            <a class="btn btn-success" type="button" style="border-radius: 10px" target="_blank"
+                href="{{ route('orderan') }}"><i
+                    class="fas fa-print"></i>
+                Print
+            </a>
+        </div>
+    </div>
+</div>
 <div class="row mt-3">
-    <div class="col">
-        <table class="table table-striped table-hover table-responsive text-center">
+    <div class="col table-responsive">
+        <table class="table table-striped table-hover text-center">
             <thead>
                 <tr>
                     <th>Tanggal</th>
@@ -22,7 +58,8 @@
                         <td class="@if ($order->status == 'baru') bg-danger @elseif($order->status == 'proses') bg-warning @else bg-success @endif text-white border"
                             style="text-transform: uppercase;">
                             <button type="button" wire:click='show({{ $order->id }})'
-                                class="btn btn-outline-light border-0" data-bs-toggle="modal" data-bs-target="#ModalInfo">
+                                class="btn btn-outline-light border-0" data-bs-toggle="modal"
+                                data-bs-target="#ModalInfo">
                                 {{ $order->status }}
                             </button>
                         </td>
@@ -65,7 +102,7 @@
                 @empty
                     <tr>
                         <td colspan="7">
-                            <h5 class="text-center">Belum ada orderan</h5>
+                            <h5 class="text-center">Tidak ada orderan</h5>
                         </td>
                     </tr>
                 @endforelse

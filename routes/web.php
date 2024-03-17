@@ -3,6 +3,7 @@
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImpersonateController;
 
@@ -18,7 +19,7 @@ use App\Http\Controllers\ImpersonateController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.home');
 });
 
 Auth::routes([
@@ -27,7 +28,9 @@ Auth::routes([
     'verify' => false,
 ]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function(){
+    return redirect()->route('transaksi');
+})->name('home');
 
 Route::controller(ImpersonateController::class)->group(function () {
     Route::middleware(['auth', 'user-access:Admin'])->group(function () {
@@ -35,8 +38,14 @@ Route::controller(ImpersonateController::class)->group(function () {
     });
     Route::get('stop-impersonating', 'stopImpersonating')->name('admin.stop-impersonating');
 });
+
+Route::controller(PdfController::class)->group(function (){
+    Route::get('orderan', 'orderan')->name('orderan');
+});
+
 Route::controller(Controller::class)->group(function(){
     Route::get('/transaksi', 'transaksi')->name('transaksi');
     Route::get('/pengguna', 'pengguna')->name('pengguna');
     Route::get('/layanan', 'layanan')->name('layanan');
+    Route::get('/konsumen', 'konsumen')->name('konsumen');
 });

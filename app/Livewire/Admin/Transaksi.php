@@ -18,6 +18,10 @@ class Transaksi extends Component
         $bayarfunction = false,
         $detailon = false;
 
+    public $konsumenlist,
+        $konsumen_id,
+        $showresult = false;
+
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     protected $paginationName = 'Page';
@@ -25,7 +29,7 @@ class Transaksi extends Component
     {
         return 'components.pagination_custom';
     }
-    public function resetPageUser()
+    public function resetPageOrder()
     {
         $this->gotoPage(1, 'Page');
     }
@@ -34,6 +38,7 @@ class Transaksi extends Component
         $searchorder = '%' . $this->searchorder . '%';
         return view('livewire.admin.transaksi', [
             'orders' => OrderTbl::where('kode_laundry', 'LIKE', $searchorder)
+                ->orWhere('status', 'LIKE', $searchorder)
                 ->orderBy('id', 'DESC')
                 ->paginate(5, ['*'], $this->paginationName),
             'layanans' => LayananTbl::all(),
@@ -94,13 +99,26 @@ class Transaksi extends Component
             'no_telp' => 'required',
         ]);
 
-        $konsumen = KonsumenTbl::create([
-            'nama' => $this->nama,
-            'no_telp' => $this->no_telp,
-        ]);
+        $konsumen_terdaftar = KonsumenTbl::where('nama', $this->nama)
+            ->where('no_telp', $this->no_telp)
+            ->first();
+        if ($konsumen_terdaftar) {
+            $konsumen = $konsumen_terdaftar;
+        } else {
+            $konsumen = KonsumenTbl::create([
+                'nama' => $this->nama,
+                'no_telp' => $this->no_telp,
+            ]);
+        }
+
+        $base_code = 'LDR-' . $konsumen->id . date('mdy');
+
+        $existing_orders_count = OrderTbl::where('kode_laundry', 'like', $base_code . '%')->count();
+
+        $suffix = $existing_orders_count > 0 ? rand(10, 99) : '';
 
         $order = OrderTbl::create([
-            'kode_laundry' => 'LDR-' . $konsumen->id . $this->id_layanan,
+            'kode_laundry' => $base_code . $suffix,
             'id_konsumens' => $konsumen->id,
             'id_layanans' => $this->id_layanan,
             'jumlah' => $this->jumlah,
@@ -228,5 +246,29 @@ class Transaksi extends Component
         $this->bayarfunction = false;
         $this->listmode = true;
         session()->flash('message', 'Orderan berhasil dibayar.');
+    }
+
+    public function searchResult()
+    {
+        if (!empty($this->nama)) {
+            $this->konsumenlist = KonsumenTbl::orderby('nama', 'asc')
+                ->select('*')
+                ->where('nama', 'like', '%' . $this->nama . '%')
+                ->limit(5)
+                ->get();
+
+            $this->showresult = true;
+        } else {
+            $this->showresult = false;
+        }
+    }
+
+    public function pilihkonsumen($id = 0)
+    {
+        $konsumenlist = KonsumenTbl::select('*')->where('id', $id)->first();
+
+        $this->nama = $konsumenlist->nama;
+        $this->no_telp = $konsumenlist->no_telp;
+        $this->showresult = false;
     }
 }

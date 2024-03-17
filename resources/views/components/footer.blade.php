@@ -1,6 +1,6 @@
 <footer class="d-flex flex-wrap justify-content-between align-items-center pt-3 pb-3 mb-0 border-top">
     <div class="col-md-4 ps-3 d-flex align-items-center">
-        <a href="Javascript:void(0)" class="me-2 mb-md-0 text-white text-decoration-none lh-1">
+        <a href="/" class="me-2 mb-md-0 text-white text-decoration-none lh-1">
             <i class="fa-solid fa-house"></i>
         </a>
         <span class="text-white"><a

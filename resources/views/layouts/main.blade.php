@@ -370,6 +370,7 @@
             z-index: 9999;
             /* Make sure the loading overlay appears on top of other content */
         }
+
     </style>
     @livewireStyles
     @stack('css')

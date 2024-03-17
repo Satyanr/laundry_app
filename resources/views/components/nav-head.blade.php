@@ -61,17 +61,17 @@
                             </a>
                         </div>
                     @endif
-                @else
+                
                     <div class="col d-flex me-2" style="margin-left: auto;">
-                        <a href="{{ route('login') }}" class="btn btn-outline-light border-0">
+                        <a href="{{ route('konsumen') }}" class="btn btn-outline-light border-0">
                             <div class="row">
                                 <div class="col">
-                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    <i class="fa-solid fa-users-between-lines"></i>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    Tentang
+                                    Konsumen
                                 </div>
                             </div>
                         </a>

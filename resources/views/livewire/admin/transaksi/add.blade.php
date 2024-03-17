@@ -79,7 +79,22 @@
                     <div class="col">
                         <div class="form-input">
                             <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                wire:model="nama" placeholder="Nama">
+                                wire:input="searchResult" wire:model="nama" placeholder="Nama">
+                            @if ($showresult)
+                                <ul class="list-group">
+                                    @if (!empty($konsumenlist))
+                                        @foreach ($konsumenlist as $name)
+                                            <a class="" href="javascript:void(0)">
+                                                <li class="list-group-item"
+                                                    wire:click="pilihkonsumen({{ $name->id }})">
+                                                    {{ $name->nama }},
+                                                    {{ $name->no_telp }}
+                                                </li>
+                                            </a>
+                                        @endforeach
+                                    @endif
+                                </ul>
+                            @endif
                             @error('nama')
                                 <div class="invalid-feedback">
                                     {{ $message }}

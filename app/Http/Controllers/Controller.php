@@ -28,4 +28,9 @@ class Controller extends BaseController
     {
         return view('pages.layanan');
     }
+
+    public function konsumen()
+    {
+        return view('pages.konsumen');
+    }
 }
