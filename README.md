@@ -4,7 +4,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `ro
 (1, 'Admin', 'test@cus.com', NULL, '$2y$10$pKzMTekg7OgeZ8e2fvH7Ju0LWf.zXBjSqadSMgjYcqaWiKw.HZXIG', 2, NULL, '2024-02-27 12:38:33', '2024-02-28 11:39:25');
 
 ## Login nya
-email : test@cus.com
+email : test@cus.com <br>
 password: 123
 
 
