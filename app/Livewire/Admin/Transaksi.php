@@ -8,12 +8,15 @@ use App\Models\LayananTbl;
 use App\Models\KonsumenTbl;
 use Livewire\WithPagination;
 use App\Models\PembayaranTbl;
+use Illuminate\Validation\Rule;
 
 class Transaksi extends Component
 {
-    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status;
+    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status, $uang_bayar, $kembalian, $layanan, $laundrycode;
     public $updatemode = false,
-        $listmode = false;
+        $listmode = false,
+        $bayarfunction = false,
+        $detailon = false;
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -53,6 +56,8 @@ class Transaksi extends Component
         $this->jumlah = '';
         $this->total = 0;
         $this->orderan_id = null;
+        $this->uang_bayar = '';
+        $this->kembalian = 0;
     }
     public function calculateTotalHarga()
     {
@@ -69,12 +74,22 @@ class Transaksi extends Component
             $this->total = 0;
         }
     }
+    public function calculateKembalian()
+    {
+        if (is_numeric($this->uang_bayar)) {
+            $this->kembalian = $this->uang_bayar - $this->total;
+        }
+
+        if ($this->uang_bayar == 0) {
+            $this->kembalian = 0;
+        }
+    }
 
     public function store()
     {
         $this->validate([
             'id_layanan' => 'required',
-            'jumlah' => 'required|numeric',
+            'jumlah' => 'required|numeric|min:0',
             'nama' => 'required',
             'no_telp' => 'required',
         ]);
@@ -119,7 +134,7 @@ class Transaksi extends Component
     {
         $this->validate([
             'id_layanan' => 'required',
-            'jumlah' => 'required|numeric',
+            'jumlah' => 'required|numeric|min:0',
             'nama' => 'required',
             'no_telp' => 'required',
         ]);
@@ -144,6 +159,9 @@ class Transaksi extends Component
     {
         $this->resetInput();
         $this->updatemode = false;
+        $this->bayarfunction = false;
+        $this->detailon = false;
+        $this->listmode = true;
     }
     public function destroy($id)
     {
@@ -153,23 +171,62 @@ class Transaksi extends Component
     }
     public function show($id)
     {
+        $this->detailon = true;
         $order = OrderTbl::find($id);
         $this->orderan_id = $order->id;
         $this->id_konsumen = $order->id_konsumens;
         $this->id_layanan = $order->id_layanans;
         $this->jumlah = $order->jumlah;
         $this->total = $order->total_harga;
+        $this->laundrycode = $order->kode_laundry;
+        $this->status = $order->status;
 
         $konsumen = KonsumenTbl::find($order->id_konsumens);
         $this->nama = $konsumen->nama;
         $this->no_telp = $konsumen->no_telp;
+
+        $layanan = LayananTbl::find($order->id_layanans);
+        $this->layanan = $layanan->nama;
     }
 
-    public function updatestatus($id)
+    public function updatestatus()
     {
-        $order = OrderTbl::find($id);
+        $order = OrderTbl::find($this->orderan_id);
         $order->status = $this->status;
         $order->save();
         session()->flash('message', 'Status orderan berhasil diupdate.');
+    }
+    public function bayar($id)
+    {
+        $ordr = OrderTbl::find($id);
+        $this->orderan_id = $ordr->id;
+
+        $this->total = OrderTbl::find($this->orderan_id)->total_harga;
+        $this->bayarfunction = true;
+        $this->listmode = false;
+    }
+    public function bayarupdate()
+    {
+        $paymentord = PembayaranTbl::where('id_orders', $this->orderan_id)->first();
+        $this->total = OrderTbl::find($this->orderan_id)->total_harga;
+        $this->validate(
+            [
+                'uang_bayar' => 'required|numeric|min:' . $this->total,
+            ],
+            [
+                'uang_bayar.min' => 'Uang bayar harus lebih besar atau sama dengan total harga.',
+                'uang_bayar.required' => 'Uang bayar harus diisi.',
+                'uang_bayar.numeric' => 'Uang bayar harus berupa angka.',
+            ],
+        );
+
+        $paymentord->uang_bayar = $this->uang_bayar;
+        $paymentord->kembalian = $this->uang_bayar - $this->total;
+        $paymentord->status_pembayaran = 'lunas';
+        $paymentord->save();
+        $this->resetInput();
+        $this->bayarfunction = false;
+        $this->listmode = true;
+        session()->flash('message', 'Orderan berhasil dibayar.');
     }
 }
