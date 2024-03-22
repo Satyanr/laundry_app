@@ -1,3 +1,14 @@
+# Tambahkan Akun Ini Ke Database Table User Setelah Melakukan Migration Untuk Bisa Akses Web
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'test@cus.com', NULL, '$2y$10$pKzMTekg7OgeZ8e2fvH7Ju0LWf.zXBjSqadSMgjYcqaWiKw.HZXIG', 2, NULL, '2024-02-27 12:38:33', '2024-02-28 11:39:25');
+
+## Login nya
+email : test@cus.com <br>
+password: 123
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
