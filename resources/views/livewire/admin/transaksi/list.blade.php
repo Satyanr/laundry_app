@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body text-center text-white text-bg-warning">
                 <h3><i class="fa-solid fa-user-clock"></i> <br></h3>
-                <h6>Laundryan Dalam Proses : <br>{{ $orders->where('status', 'proses')->count() }}</h6>
+                <h6>Laundryan Dalam Proses : <br>{{ $statusProsesCount}}</h6>
             </div>
         </div>
     </div>
@@ -11,7 +11,7 @@
         <div class="card">
             <div class="card-body text-center text-white text-bg-info">
                 <h3><i class="fa-solid fa-user-check"></i> <br></h3>
-                <h6>Laundryan Belum Diambil : <br>{{ $orders->where('status', 'selesai')->count() }}</h6>
+                <h6>Laundryan Belum Diambil : <br>{{ $statusBelumDiambilCount }}</h6>
             </div>
         </div>
     </div>
@@ -23,14 +23,18 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row mt-3">
     <div class="col" style="margin-left: auto">
         <div class="customize-input float-end ms-2">
-            <a class="btn btn-success" type="button" style="border-radius: 10px" target="_blank"
-                href="{{ route('orderan') }}"><i
-                    class="fas fa-print"></i>
-                Print
-            </a>
+            <form action="{{ route('orderan') }}" method="GET">
+                <div class="input-group mb-3">
+                    <input type="date" class="form-control" name="start" id="start" required>
+                    <span class="input-group-text">to</span>
+                    <input type="date" class="form-control" name="end" id="end" required>
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-print"></i>
+                        Print</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -65,9 +69,10 @@
                         </td>
                         <td class="@if ($order->pembayaran->status_pembayaran == 'lunas') bg-success @else bg-danger @endif text-white"
                             style="text-transform: uppercase;">
-                            <a href="javascript:void(0)" class="btn btn-outline-light border-0"
-                                wire:click='bayar({{ $order->id }})'>
-                                {{ $order->pembayaran->status_pembayaran }}</a>
+                            <button type="button" wire:click='show({{ $order->id }})'
+                                class="btn btn-outline-light border-0" data-bs-toggle="modal"
+                                data-bs-target="#ModalInfo">
+                                {{ $order->pembayaran->status_pembayaran }}</button>
                         </td>
                         <td>
                             <div class="btn-group dropend">
@@ -195,6 +200,168 @@
                             </div>
                         </div>
                     </div>
+                    @if ($sttsbyr == 'lunas')
+                        <div class="row my-3">
+                            <div class="col">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-success text-white"
+                                                type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne" aria-expanded="false"
+                                                aria-controls="collapseOne">
+                                                Pembayaran Lunas
+                                            </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <form>
+                                                            <div class="row text-center">
+                                                                <div class="col">
+                                                                    <label class="form-label"><strong> Pembayaran
+                                                                        </strong></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label"><strong> Uang Bayar
+                                                                            </strong></label>
+                                                                        <input type="number"
+                                                                            class="form-control @error('uang_bayar') is-invalid @enderror"
+                                                                            wire:model="uang_bayar"
+                                                                            wire:input='calculateKembalian()' required>
+                                                                        @error('uang_bayar')
+                                                                            <div class="invalid-feedback">
+                                                                                {{ $message }}
+                                                                            </div>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label"><strong> Total Harga
+                                                                            </strong></label>
+                                                                        <span class="form-control"> Rp.
+                                                                            {{ number_format($this->total, 0, ',', '.') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-auto">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            Kembalian :
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            <h3 class="text-primary">Rp.
+                                                                                {{ number_format($this->kembalian, 0, ',', '.') }}
+                                                                            </h3>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            <div class="text-white bg-warning w-100 border-0 rounded-pill text-center mt-2"
+                                                                                wire:loading
+                                                                                wire:target='calculateTotalHarga'>
+                                                                                Loading...
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-auto text-center mt-2"
+                                                                    style="margin-left: auto">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            <button type="button"
+                                                                                class="btn btn-primary d-flex m-auto mt-4"
+                                                                                wire:click.prevent='bayarupdate'>Bayarkan</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="row my-3">
+                            <div class="col">
+                                <form>
+                                    <div class="row text-center">
+                                        <div class="col">
+                                            <label class="form-label"><strong> Pembayaran </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label"><strong> Uang Bayar </strong></label>
+                                                <input type="number"
+                                                    class="form-control @error('uang_bayar') is-invalid @enderror"
+                                                    wire:model="uang_bayar" wire:input='calculateKembalian()'
+                                                    required>
+                                                @error('uang_bayar')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label"><strong> Total Harga </strong></label>
+                                                <span class="form-control"> Rp.
+                                                    {{ number_format($this->total, 0, ',', '.') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <div class="row">
+                                                <div class="col">
+                                                    Kembalian :
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h3 class="text-primary">Rp.
+                                                        {{ number_format($this->kembalian, 0, ',', '.') }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="text-white bg-warning w-100 border-0 rounded-pill text-center mt-2"
+                                                        wire:loading wire:target='calculateTotalHarga'>
+                                                        Loading...
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto text-center mt-2" style="margin-left: auto">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="button" class="btn btn-primary d-flex m-auto mt-4"
+                                                        wire:click.prevent='bayarupdate'>Bayarkan</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>

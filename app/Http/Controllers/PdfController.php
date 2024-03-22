@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\OrderTbl;
 use Illuminate\Http\Request;
 
@@ -11,10 +12,13 @@ class PdfController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    public function orderan()
+
+    public function orderan(Request $request)
     {
-        $orderan = OrderTbl::all();
+        $start = Carbon::createFromFormat('Y-m-d', $request->input('start'));
+        $end = Carbon::createFromFormat('Y-m-d', $request->input('end'));
+
+        $orderan = OrderTbl::whereBetween('created_at', [$start, $end])->get();
         $data = [
             'orders' => $orderan,
         ];

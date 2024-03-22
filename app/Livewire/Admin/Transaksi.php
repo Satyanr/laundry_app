@@ -12,10 +12,9 @@ use Illuminate\Validation\Rule;
 
 class Transaksi extends Component
 {
-    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status, $uang_bayar, $kembalian, $layanan, $laundrycode;
+    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status, $uang_bayar, $kembalian, $layanan, $laundrycode, $sttsbyr;
     public $updatemode = false,
         $listmode = false,
-        $bayarfunction = false,
         $detailon = false;
 
     public $konsumenlist,
@@ -42,6 +41,8 @@ class Transaksi extends Component
                 ->orderBy('id', 'DESC')
                 ->paginate(5, ['*'], $this->paginationName),
             'layanans' => LayananTbl::all(),
+            'statusBelumDiambilCount' => OrderTbl::where('status', 'selesai')->count(),
+            'statusProsesCount' => OrderTbl::where('status', 'proses')->count(),
         ]);
     }
     public function liston()
@@ -177,7 +178,6 @@ class Transaksi extends Component
     {
         $this->resetInput();
         $this->updatemode = false;
-        $this->bayarfunction = false;
         $this->detailon = false;
         $this->listmode = true;
     }
@@ -205,6 +205,7 @@ class Transaksi extends Component
 
         $layanan = LayananTbl::find($order->id_layanans);
         $this->layanan = $layanan->nama;
+        $this->sttsbyr = PembayaranTbl::where('id_orders', $order->id)->first()->status_pembayaran;
     }
 
     public function updatestatus()
@@ -214,15 +215,7 @@ class Transaksi extends Component
         $order->save();
         session()->flash('message', 'Status orderan berhasil diupdate.');
     }
-    public function bayar($id)
-    {
-        $ordr = OrderTbl::find($id);
-        $this->orderan_id = $ordr->id;
 
-        $this->total = OrderTbl::find($this->orderan_id)->total_harga;
-        $this->bayarfunction = true;
-        $this->listmode = false;
-    }
     public function bayarupdate()
     {
         $paymentord = PembayaranTbl::where('id_orders', $this->orderan_id)->first();
@@ -242,9 +235,6 @@ class Transaksi extends Component
         $paymentord->kembalian = $this->uang_bayar - $this->total;
         $paymentord->status_pembayaran = 'lunas';
         $paymentord->save();
-        $this->resetInput();
-        $this->bayarfunction = false;
-        $this->listmode = true;
         session()->flash('message', 'Orderan berhasil dibayar.');
     }
 

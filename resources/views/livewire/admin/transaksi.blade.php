@@ -33,8 +33,6 @@
                         <h4>
                             @if ($updatemode)
                                 Edit Orderan
-                            @elseif ($bayarfunction)
-                                Bayar Orderan
                             @else
                                 Orderan
                             @endif
