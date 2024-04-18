@@ -306,6 +306,25 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="mb-3">
+                                                <label class="form-label"><strong> Metode Pembayaran </strong></label>
+                                                <select class="form-select @error('mtdbyr') is-invalid @enderror" wire:model="mtdbyr" required>
+                                                    <option value="">Cash</option>
+                                                    @forelse ($mtdbyrs as $mtdbyrop)
+                                                        <option value="{{ $mtdbyrop->id }}">{{ $mtdbyrop->metode_pembayaran }}</option>
+                                                    @empty
+                                                        <option value="">Belum ada metode pembayaran terdata</option>
+                                                    @endforelse
+                        
+                                                </select>
+                                                @error('mtdbyr')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
                                                 <label class="form-label"><strong> Uang Bayar </strong></label>
                                                 <input type="number"
                                                     class="form-control @error('uang_bayar') is-invalid @enderror"
