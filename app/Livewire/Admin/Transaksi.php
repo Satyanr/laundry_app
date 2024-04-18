@@ -9,6 +9,7 @@ use App\Models\KonsumenTbl;
 use Livewire\WithPagination;
 use App\Models\PembayaranTbl;
 use Illuminate\Validation\Rule;
+use App\Models\MetodePembayaranTbl;
 
 class Transaksi extends Component
 {
@@ -41,7 +42,7 @@ class Transaksi extends Component
                 ->orderBy('id', 'DESC')
                 ->paginate(5, ['*'], $this->paginationName),
             'layanans' => LayananTbl::all(),
-            'mtdbyrs'=> PembayaranTbl::all(),
+            'mtdbyrs'=> MetodePembayaranTbl::all(),
             'statusBelumDiambilCount' => OrderTbl::where('status', 'selesai')->count(),
             'statusProsesCount' => OrderTbl::where('status', 'proses')->count(),
         ]);
@@ -208,6 +209,7 @@ class Transaksi extends Component
         $layanan = LayananTbl::find($order->id_layanans);
         $this->layanan = $layanan->nama;
         $this->sttsbyr = PembayaranTbl::where('id_orders', $order->id)->first()->status_pembayaran;
+
     }
 
     public function updatestatus()

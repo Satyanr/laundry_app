@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body text-center text-white text-bg-warning">
                 <h3><i class="fa-solid fa-user-clock"></i> <br></h3>
-                <h6>Laundryan Dalam Proses : <br>{{ $statusProsesCount}}</h6>
+                <h6>Laundryan Dalam Proses : <br>{{ $statusProsesCount }}</h6>
             </div>
         </div>
     </div>
@@ -171,7 +171,7 @@
                                                 <div class="col">
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="diambil"
-                                                            id="diambil" value="diambil" wire:model='diambil'
+                                                            id="diambil" value="diambil" wire:model='status'
                                                             wire:change='updatestatus'>
                                                         <label class="form-check-label" for="diambil">Diambil</label>
                                                     </div>
@@ -307,14 +307,17 @@
                                         <div class="col">
                                             <div class="mb-3">
                                                 <label class="form-label"><strong> Metode Pembayaran </strong></label>
-                                                <select class="form-select @error('mtdbyr') is-invalid @enderror" wire:model="mtdbyr" required>
+                                                <select class="form-select @error('mtdbyr') is-invalid @enderror"
+                                                    wire:model="mtdbyr" required>
                                                     <option value="">Cash</option>
                                                     @forelse ($mtdbyrs as $mtdbyrop)
-                                                        <option value="{{ $mtdbyrop->id }}">{{ $mtdbyrop->metode_pembayaran }}</option>
+                                                        <option value="{{ $mtdbyrop->id }}">
+                                                            {{ $mtdbyrop->metode_pembayaran }}</option>
                                                     @empty
-                                                        <option value="">Belum ada metode pembayaran terdata</option>
+                                                        <option value="">Belum ada metode pembayaran terdata
+                                                        </option>
                                                     @endforelse
-                        
+
                                                 </select>
                                                 @error('mtdbyr')
                                                     <div class="invalid-feedback">
@@ -323,6 +326,8 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col">
                                             <div class="mb-3">
                                                 <label class="form-label"><strong> Uang Bayar </strong></label>
