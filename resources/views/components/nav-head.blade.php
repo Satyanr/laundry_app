@@ -3,7 +3,7 @@
         <a class="navbar-brand" href="{{ route('transaksi') }}">
             {{-- <img src="/image/brand.png" alt="Logo" width="36" height="36"> --}}
             <span class="text-white">
-                Laundry SMKN 1 Ciamis
+                Laundry SMKN 1 Ciamis   
             </span>
         </a>
         <button class="navbar-toggler pb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"

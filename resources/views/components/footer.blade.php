@@ -9,17 +9,15 @@
     </div>
 
     <ul class="nav col-md-4 pe-3 justify-content-end list-unstyled d-flex">
-        <li class="ms-3"><a class="text-white" href="https://twitter.com/bmti_kemdikbud">
+        <li class="ms-3"><a class="text-white" href="https://twitter.com/Satya14368226">
                 <i class="fa-brands fa-twitter"></i>
             </a></li>
-        <li class="ms-3"><a class="text-white" href="https://www.instagram.com/bmti.kemdikbud/">
+        <li class="ms-3"><a class="text-white" href="https://www.instagram.com/satya.dairenji/">
                 <i class="fa-brands fa-instagram"></i>
             </a></li>
-        <li class="ms-3"><a class="text-white" href="https://www.facebook.com/bmti.kemdikbud/">
+        <li class="ms-3"><a class="text-white" href="https://web.facebook.com/profile.php?id=100010694021366">
                 <i class="fa-brands fa-facebook"></i>
             </a></li>
-        <li class="ms-3"><a class="text-white" href="https://www.youtube.com/channel/UCKH7TY5zOLIa5uWYpDgZWjQ">
-                <i class="fa-brands fa-youtube"></i>
-            </a></li>
+            
     </ul>
 </footer>
