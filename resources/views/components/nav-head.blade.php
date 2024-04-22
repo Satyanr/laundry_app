@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top navbar-expand-lg" style="background-color: #2F5296 ">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('transaksi') }}">
-            {{-- <img src="/image/brand.png" alt="Logo" width="36" height="36"> --}}
+            <img src="/favicon.png" alt="Logo" width="50" height="50">
             <span class="text-white">
                 Laundry SMKN 1 Ciamis   
             </span>

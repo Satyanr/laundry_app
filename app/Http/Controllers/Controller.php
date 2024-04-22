@@ -33,4 +33,9 @@ class Controller extends BaseController
     {
         return view('pages.konsumen');
     }
+
+    public function dashboard()
+    {
+        return view('dashboard');
+    }
 }

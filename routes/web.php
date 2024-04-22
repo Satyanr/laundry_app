@@ -44,7 +44,12 @@ Route::controller(PdfController::class)->group(function () {
 });
 
 Route::controller(Controller::class)->group(function () {
-    Route::get('/transaksi', 'transaksi')->name('transaksi');
+    Route::middleware(['auth', 'user-access:Admin,Petugas'])->group(function () {
+        Route::get('/transaksi', 'transaksi')->name('transaksi');
+    });
+    Route::middleware(['auth', 'user-access:Admin,Pimpinan'])->group(function () {
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
+    });
     Route::middleware(['auth', 'user-access:Admin'])->group(function () {
         Route::get('/pengguna', 'pengguna')->name('pengguna');
         Route::get('/layanan', 'layanan')->name('layanan');

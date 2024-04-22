@@ -202,12 +202,17 @@ class Transaksi extends Component
         $this->laundrycode = $order->kode_laundry;
         $this->status = $order->status;
 
+        $paymentord = PembayaranTbl::where('id_orders', $this->orderan_id)->first();
+        $this->uang_bayar = $paymentord->uang_bayar;
+        $this->mtdbyr = $paymentord->metode_pembayaran;
+        $this->kembalian = $paymentord->kembalian;
+
         $konsumen = KonsumenTbl::find($order->id_konsumens);
         $this->nama = $konsumen->nama;
         $this->no_telp = $konsumen->no_telp;
 
         $layanan = LayananTbl::find($order->id_layanans);
-        $this->layanan = $layanan->nama;
+        $this->layanan = $layanan->nama_layanan;
         $this->sttsbyr = PembayaranTbl::where('id_orders', $order->id)->first()->status_pembayaran;
 
     }
@@ -227,15 +232,17 @@ class Transaksi extends Component
         $this->validate(
             [
                 'uang_bayar' => 'required|numeric|min:' . $this->total,
-                'mtdbyr' => 'required',
             ],
             [
                 'uang_bayar.min' => 'Uang bayar harus lebih besar atau sama dengan total harga.',
                 'uang_bayar.required' => 'Uang bayar harus diisi.',
                 'uang_bayar.numeric' => 'Uang bayar harus berupa angka.',
-                'mtdbyr.required' => 'Metode pembayaran harus diisi.',
             ],
         );
+
+        if ($this->mtdbyr == null){
+            $this->mtdbyr = 'cash';
+        }
 
         $paymentord->uang_bayar = $this->uang_bayar;
         $paymentord->kembalian = $this->uang_bayar - $this->total;

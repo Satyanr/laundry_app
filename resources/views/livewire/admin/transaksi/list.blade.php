@@ -64,7 +64,7 @@
                             <button type="button" wire:click='show({{ $order->id }})'
                                 class="btn btn-outline-light border-0" data-bs-toggle="modal"
                                 data-bs-target="#ModalInfo">
-                                {{ $order->status }}
+                                {{ ucfirst(trans($order->status)) }}
                             </button>
                         </td>
                         <td class="@if ($order->pembayaran->status_pembayaran == 'lunas') bg-success @else bg-danger @endif text-white"
@@ -72,7 +72,7 @@
                             <button type="button" wire:click='show({{ $order->id }})'
                                 class="btn btn-outline-light border-0" data-bs-toggle="modal"
                                 data-bs-target="#ModalInfo">
-                                {{ $order->pembayaran->status_pembayaran }}</button>
+                                {{ ucfirst(trans($order->pembayaran->status_pembayaran)) }}</button>
                         </td>
                         <td>
                             <div class="btn-group dropend">
@@ -184,10 +184,18 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    Jumlah Item: {{ $this->jumlah }}
-                                    Jenis Layanan: {{ $this->layanan }}
-                                    Total Harga: {{ $this->total }}
-                                    Identitas
+                                    <div class="row my-2">
+                                        <div class="col">
+                                            Jumlah Item: {{ $this->jumlah }}
+                                        </div>
+                                        <div class="col">
+                                            Jenis Layanan: {{ $this->layanan }}
+                                        </div>
+                                        <div class="col">
+                                            Total Harga: {{ $this->total }}
+                                        </div>
+                                    </div>
+                                    <strong>Identitas</strong>
                                     <div class="row">
                                         <div class="col">
                                             Nama: {{ $this->nama }}
@@ -203,8 +211,8 @@
                     @if ($sttsbyr == 'lunas')
                         <div class="row my-3">
                             <div class="col">
-                                <div class="accordion" id="accordionExample">
-                                    <div class="accordion-item">
+                                <div wire:ignore.self class="accordion" id="accordionExample">
+                                    <div wire:ignore.self class="accordion-item">
                                         <h2 class="accordion-header">
                                             <button class="accordion-button collapsed bg-success text-white"
                                                 type="button" data-bs-toggle="collapse"
@@ -213,9 +221,22 @@
                                                 Pembayaran Lunas
                                             </button>
                                         </h2>
-                                        <div id="collapseOne" class="accordion-collapse collapse"
+                                        <div wire:ignore.self id="collapseOne" class="accordion-collapse collapse"
                                             data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
+                                                <div class="row mb-3">
+                                                    <div class="col-auto">
+                                                        @if (session()->has('message'))
+                                                            <div class="alert alert-success alert-dismissible fade show"
+                                                                role="alert">
+                                                                <strong>{{ session('message') }}</strong>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="alert"
+                                                                    aria-label="Close"></button>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col">
                                                         <form>
@@ -223,6 +244,35 @@
                                                                 <div class="col">
                                                                     <label class="form-label"><strong> Pembayaran
                                                                         </strong></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label"><strong> Metode
+                                                                                Pembayaran </strong></label>
+                                                                        <select
+                                                                            class="form-select @error('mtdbyr') is-invalid @enderror"
+                                                                            wire:model="mtdbyr" required>
+                                                                            <option value="">Cash</option>
+                                                                            @forelse ($mtdbyrs as $mtdbyrop)
+                                                                                <option
+                                                                                    value="{{ $mtdbyrop->metode_pembayaran }}">
+                                                                                    {{ $mtdbyrop->metode_pembayaran }}
+                                                                                </option>
+                                                                            @empty
+                                                                                <option value="">Belum ada metode
+                                                                                    pembayaran lain
+                                                                                </option>
+                                                                            @endforelse
+
+                                                                        </select>
+                                                                        @error('mtdbyr')
+                                                                            <div class="invalid-feedback">
+                                                                                {{ $message }}
+                                                                            </div>
+                                                                        @enderror
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="row">
@@ -301,6 +351,18 @@
                                     <div class="row text-center">
                                         <div class="col">
                                             <label class="form-label"><strong> Pembayaran </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-auto">
+                                            @if (session()->has('message'))
+                                                <div class="alert alert-success alert-dismissible fade show"
+                                                    role="alert">
+                                                    <strong>{{ session('message') }}</strong>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="row">
