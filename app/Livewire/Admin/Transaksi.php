@@ -9,10 +9,11 @@ use App\Models\KonsumenTbl;
 use Livewire\WithPagination;
 use App\Models\PembayaranTbl;
 use Illuminate\Validation\Rule;
+use App\Models\MetodePembayaranTbl;
 
 class Transaksi extends Component
 {
-    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status, $uang_bayar, $kembalian, $layanan, $laundrycode, $sttsbyr;
+    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status, $uang_bayar, $kembalian, $layanan, $laundrycode, $sttsbyr, $mtdbyr;
     public $updatemode = false,
         $listmode = false,
         $detailon = false;
@@ -41,6 +42,7 @@ class Transaksi extends Component
                 ->orderBy('id', 'DESC')
                 ->paginate(5, ['*'], $this->paginationName),
             'layanans' => LayananTbl::all(),
+            'mtdbyrs'=> MetodePembayaranTbl::all(),
             'statusBelumDiambilCount' => OrderTbl::where('status', 'selesai')->count(),
             'statusProsesCount' => OrderTbl::where('status', 'proses')->count(),
         ]);
@@ -63,6 +65,7 @@ class Transaksi extends Component
         $this->total = 0;
         $this->orderan_id = null;
         $this->uang_bayar = '';
+        $this->mtdbyr = '';
         $this->kembalian = 0;
     }
     public function calculateTotalHarga()
@@ -206,6 +209,7 @@ class Transaksi extends Component
         $layanan = LayananTbl::find($order->id_layanans);
         $this->layanan = $layanan->nama;
         $this->sttsbyr = PembayaranTbl::where('id_orders', $order->id)->first()->status_pembayaran;
+
     }
 
     public function updatestatus()
@@ -223,16 +227,19 @@ class Transaksi extends Component
         $this->validate(
             [
                 'uang_bayar' => 'required|numeric|min:' . $this->total,
+                'mtdbyr' => 'required',
             ],
             [
                 'uang_bayar.min' => 'Uang bayar harus lebih besar atau sama dengan total harga.',
                 'uang_bayar.required' => 'Uang bayar harus diisi.',
                 'uang_bayar.numeric' => 'Uang bayar harus berupa angka.',
+                'mtdbyr.required' => 'Metode pembayaran harus diisi.',
             ],
         );
 
         $paymentord->uang_bayar = $this->uang_bayar;
         $paymentord->kembalian = $this->uang_bayar - $this->total;
+        $paymentord->metode_pembayaran = $this->mtdbyr;
         $paymentord->status_pembayaran = 'lunas';
         $paymentord->save();
         session()->flash('message', 'Orderan berhasil dibayar.');

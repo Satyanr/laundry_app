@@ -3,14 +3,14 @@
         <div class="col">
             <div class="row justify-content-between">
                 <div class="col">
-                    <h4>Tambah Layanan</h4>
+                    <h5>Tambah Metode Pembayaran</h5>
                 </div>
                 <div class="col-auto">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1"><i
                                 class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" class="form-control" placeholder="Cari layanan" aria-label="Cari layanan"
-                            aria-describedby="basic-addon1" wire:model='searchlayanan' wire:input='resetLayananPage'>
+                        <input type="text" class="form-control" placeholder="Cari Pembayaran" aria-label="Cari layanan"
+                            aria-describedby="basic-addon1" wire:model='searchmtdbyr' wire:input='resetMtdpmbyrnPage'>
                     </div>
                 </div>
             </div>
@@ -19,14 +19,11 @@
                     <form>
                         <div class="input-group mb-3">
                             <input type="text"
-                                class="form-control @error('nama_layanan')
+                                class="form-control @error('mtdbyr')
                                 is-invalid
                             @enderror"
                                 placeholder="Nama" aria-label="Nama" aria-describedby="basic-addon2"
-                                wire:model='nama_layanan'>
-                            <input type="number" class="form-control @error('harga')
-                            is-invalid
-                        @enderror" placeholder="Harga" wire:model='harga'>
+                                wire:model='mtdbyr'>
                             @if ($updatemode)
                                 <button class="btn btn-primary" type="button"
                                     wire:click.prevent='update'>Update</button>
@@ -36,12 +33,7 @@
                                 <button class="btn btn-primary" type="button"
                                     wire:click.prevent='store'>Tambah</button>
                             @endif
-                            @error('nama_layanan')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            @error('harga')
+                            @error('mtdbyr')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -66,30 +58,28 @@
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Nama Layanan</th>
-                                <th>Harga</th>
+                                <th>Nama Metode Pembayaran</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($layanans as $layanan)
+                            @forelse ($mtdbyrs as $mtdbyr)
                                 <tr>
-                                    <td>{{ $layanan->nama_layanan }}</td>
-                                    <td>{{ $layanan->harga }}</td>
+                                    <td>{{ $mtdbyr->metode_pembayaran }}</td>
                                     <td>
                                         <a href="javascript:void(0)" class="text-warning pe-3"
-                                            wire:click.prevent='edit({{ $layanan->id }})'><i
+                                            wire:click.prevent='edit({{ $mtdbyr->id }})'><i
                                                 class="fa fa-pencil"></i></a>
 
                                         <a href="javascript:void(0)" class="text-danger"
-                                            wire:click.prevent='destroy({{ $layanan->id }})'><i
+                                            wire:click.prevent='destroy({{ $mtdbyr->id }})'><i
                                                 class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="3">
-                                        <h5 class="text-center">Belum ada layanan</h5>
+                                        <h5 class="text-center">Belum ada Metode Pembayaran</h5>
                                     </td>
                                 </tr>
                             @endforelse
@@ -99,7 +89,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    {{ $layanans->links() }}
+                    {{ $mtdbyrs->links() }}
                 </div>
             </div>
         </div>
