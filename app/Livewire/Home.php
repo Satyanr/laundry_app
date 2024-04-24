@@ -29,7 +29,7 @@ class Home extends Component
         return view('livewire.home', [
             'orders' => OrderTbl::where('kode_laundry', 'LIKE', $searchorder)
                 ->orderBy('id', 'DESC')
-                ->paginate(3, ['*'], $this->paginationName),
+                ->paginate(4, ['*'], $this->paginationName),
         ]);
     }
 }

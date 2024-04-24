@@ -29,7 +29,7 @@
                 <li class="nav-item w-50">
                     <a class="nav-link @if ($listmode == false) active @endif
                     "
-                        aria-current="page" href="javascript:void(0)" wire:click='listoff'>
+                        aria-current="page" href="javascript:void(0)" wire:click='listoff'  wire:click.prevent='resetInput'>
                         <h4>
                             @if ($updatemode)
                                 Edit Orderan

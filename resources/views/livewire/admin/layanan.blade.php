@@ -24,7 +24,7 @@
                             @enderror"
                                 placeholder="Nama" aria-label="Nama" aria-describedby="basic-addon2"
                                 wire:model='nama_layanan'>
-                            <input type="number" class="form-control @error('harga')
+                            <input type="number" min="1000" class="form-control @error('harga')
                             is-invalid
                         @enderror" placeholder="Harga" wire:model='harga'>
                             @if ($updatemode)

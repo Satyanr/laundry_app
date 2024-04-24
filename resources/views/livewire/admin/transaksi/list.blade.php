@@ -285,7 +285,7 @@
                                                                     <div class="mb-3">
                                                                         <label class="form-label"><strong> Uang Bayar
                                                                             </strong></label>
-                                                                        <input type="number"
+                                                                        <input type="number" min="{{ $this->total }}"
                                                                             class="form-control @error('uang_bayar') is-invalid @enderror"
                                                                             wire:model="uang_bayar"
                                                                             wire:input='calculateKembalian()' required>
@@ -398,7 +398,7 @@
                                         <div class="col">
                                             <div class="mb-3">
                                                 <label class="form-label"><strong> Uang Bayar </strong></label>
-                                                <input type="number"
+                                                <input type="number" min="{{ $this->total }}"
                                                     class="form-control @error('uang_bayar') is-invalid @enderror"
                                                     wire:model="uang_bayar" wire:input='calculateKembalian()'
                                                     required>

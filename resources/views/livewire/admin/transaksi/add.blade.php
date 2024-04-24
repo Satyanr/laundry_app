@@ -48,7 +48,7 @@
                 <div class="col-6">
                     <div class="mb-3">
                         <label class="form-label"><strong> Jumlah </strong></label>
-                        <input type="number" class="form-control @error('jumlah') is-invalid @enderror"
+                        <input type="number" min="01" max="50" data-decimals="2" class="form-control @error('jumlah') is-invalid @enderror"
                             wire:model="jumlah" wire:input='calculateTotalHarga()' required>
                         @error('jumlah')
                             <div class="invalid-feedback">

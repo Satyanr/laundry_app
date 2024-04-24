@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Models\OrderTbl;
 use Illuminate\Http\Request;
 use Picqer\Barcode\BarcodeGeneratorHTML;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 class PdfController extends Controller
 {
@@ -36,8 +38,9 @@ class PdfController extends Controller
     {
         $code_laundry = OrderTbl::where('id', $id)->first()->kode_laundry;
         $ttlbyr = OrderTbl::where('id', $id)->first()->total_harga;
-        $generatorHTML = new BarcodeGeneratorHTML();
-        $barcode = $generatorHTML->getBarcode('stytzy'.$id , $generatorHTML::TYPE_CODE_128);
+        // $generatorHTML = new BarcodeGeneratorHTML();
+        // $barcode = $generatorHTML->getBarcode('stytzy'.$id , $generatorHTML::TYPE_CODE_128);
+        $barcode = QrCode::size(500)->generate('Demo');
         
         $data = [
             'code' => $code_laundry,
@@ -49,6 +52,6 @@ class PdfController extends Controller
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('pdf.barcode', $data)->setPaper('a4', 'landscape');;
 
-        return $pdf->download('barcode'.$code_laundry.'.pdf');
+        return $pdf->stream('barcode'.$code_laundry.'.pdf');
     }
 }
