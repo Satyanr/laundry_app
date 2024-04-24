@@ -22,7 +22,6 @@ Route::get('/', function () {
     return view('pages.home');
 });
 
-
 Auth::routes([
     'register' => false,
     'reset' => false,
@@ -30,7 +29,11 @@ Auth::routes([
 ]);
 
 Route::get('/home', function () {
-    return redirect()->route('transaksi');
+    if (auth()->user()->role == 'Petugas') {
+        return redirect()->route('transaksi');
+    } else {
+        return redirect()->route('dashboard');
+    }
 })->name('home');
 
 Route::controller(ImpersonateController::class)->group(function () {
