@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
-
 class PdfController extends Controller
 {
     public function __construct()
@@ -20,18 +19,19 @@ class PdfController extends Controller
     {
         $start = Carbon::createFromFormat('Y-m-d', $request->input('start'));
         $end = Carbon::createFromFormat('Y-m-d', $request->input('end'));
-
-        $orderan = OrderTbl::whereBetween('created_at', [$start, $end])->get();
+        if ($start == $end) {
+            $orderan = OrderTbl::whereDate('created_at', $start)->get();
+        } else {
+            $orderan = OrderTbl::whereBetween('created_at', [$start, $end])->get();
+        }
         $data = [
             'orders' => $orderan,
         ];
 
-
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('pdf.laporan-pdf', $data)->setPaper('a4', 'landscape');;
+        $pdf->loadView('pdf.laporan-pdf', $data)->setPaper('a4', 'landscape');
 
         return $pdf->stream();
-
     }
 
     public function barcode($id)
@@ -41,17 +41,16 @@ class PdfController extends Controller
         // $generatorHTML = new BarcodeGeneratorHTML();
         // $barcode = $generatorHTML->getBarcode('stytzy'.$id , $generatorHTML::TYPE_CODE_128);
         $barcode = QrCode::size(500)->generate('Demo');
-        
+
         $data = [
             'code' => $code_laundry,
             'barcode' => $barcode,
             'ttlbyr' => $ttlbyr,
         ];
 
-
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('pdf.barcode', $data)->setPaper('a4', 'landscape');;
+        $pdf->loadView('pdf.barcode', $data)->setPaper('a4', 'landscape');
 
-        return $pdf->stream('barcode'.$code_laundry.'.pdf');
+        return $pdf->stream('barcode' . $code_laundry . '.pdf');
     }
 }
