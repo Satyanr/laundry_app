@@ -29,10 +29,14 @@ Auth::routes([
 ]);
 
 Route::get('/home', function () {
-    if (auth()->user()->role == 'Petugas') {
-        return redirect()->route('transaksi');
+    if (auth()->user()) {
+        if (auth()->user()->role == 'Petugas') {
+            return redirect()->route('transaksi');
+        } else {
+            return redirect()->route('dashboard');
+        }
     } else {
-        return redirect()->route('dashboard');
+        return redirect()->route('login');
     }
 })->name('home');
 
