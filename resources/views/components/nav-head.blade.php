@@ -3,7 +3,7 @@
         <a class="navbar-brand" href="{{ route('transaksi') }}">
             <img src="/favicon.png" alt="Logo" width="50" height="50">
             <span class="text-white">
-                Laundry SMKN 1 Ciamis   
+                Laundry SMKN 1 Ciamis
             </span>
         </a>
         <button class="navbar-toggler pb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
@@ -77,12 +77,34 @@
                             </div>
                         </a>
                     </div>
+                    @if (auth()->user()->role == 'Admin')
+                    <div class="col d-flex me-2" style="margin-left: auto;">
+                        <a href="{{ route('transaksi') }}" class="btn btn-outline-light border-0">
+                            <div class="row">
+                                <div class="col">
+                                    <i class="fa-solid fa-users-between-lines"></i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Transaksi
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    @endif
                 @endif
                 <div class="col d-flex me-2" style="margin-left: auto;">
                     <a href="
-                    @if (auth()->user()) {{ route('transaksi') }}
+                    @if (auth()->user()) 
+                        @if (auth()->user()->role == 'Petugas') 
+                            {{ route('transaksi') }}
+                        @else
+                            {{ route('dashboard') }}
+                         @endif
                     @else
-                    {{ route('home') }} @endif "
+                        {{ route('home') }} 
+                    @endif "
                         class="btn btn-outline-light border-0" type="button">
                         <div class="row">
                             <div class="col">
