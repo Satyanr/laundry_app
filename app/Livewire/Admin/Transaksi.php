@@ -10,6 +10,7 @@ use Livewire\WithPagination;
 use App\Models\PembayaranTbl;
 use Illuminate\Validation\Rule;
 use App\Models\MetodePembayaranTbl;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Transaksi extends Component
 {
@@ -23,6 +24,7 @@ class Transaksi extends Component
         $showresult = false;
 
     use WithPagination;
+    use LivewireAlert;
     protected $paginationTheme = 'bootstrap';
     protected $paginationName = 'Page';
     public function paginationView()
@@ -134,7 +136,13 @@ class Transaksi extends Component
         ]);
 
         $this->resetInput();
-        session()->flash('message', 'Orderan berhasil ditambahkan.');
+        $this->total = 0;
+        $this->alert('success', 'Berhasil Ditambahkan!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
         
         return redirect()->to('/barcode/' . $order->id);
     }
@@ -177,7 +185,12 @@ class Transaksi extends Component
 
         $this->resetInput();
         $this->updatemode = false;
-        session()->flash('message', 'Orderan berhasil diupdate.');
+        $this->alert('success', 'Berhasil Diubah!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
     public function cancel()
     {
@@ -190,7 +203,12 @@ class Transaksi extends Component
     {
         $order = OrderTbl::find($id);
         $order->delete();
-        session()->flash('message', 'Orderan berhasil dihapus.');
+        $this->alert('success', 'Berhasil Dihapus!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
     public function show($id)
     {
@@ -251,7 +269,12 @@ class Transaksi extends Component
         $paymentord->metode_pembayaran = $this->mtdbyr;
         $paymentord->status_pembayaran = 'lunas';
         $paymentord->save();
-        session()->flash('message', 'Orderan berhasil dibayar.');
+        $this->alert('success', 'Berhasil Ditambahkan!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
 
     public function searchResult()

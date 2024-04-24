@@ -5,12 +5,15 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\MetodePembayaranTbl;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Pembayaran extends Component
 {
     public $id_mtdbyr, $mtdbyr, $searchmtdbyr;
     public $updatemode = false;
     use WithPagination;
+    use LivewireAlert;
+
     protected $paginationTheme = 'bootstrap';
     protected $paginationName = 'PembayaranPage';
     public function paginationView()
@@ -51,7 +54,12 @@ class Pembayaran extends Component
         ]);
 
         $this->resetInput();
-        session()->flash('message', 'Data Metode Pembayaran Berhasil Ditambahkan');
+        $this->alert('success', 'Berhasil Ditambahkan!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
 
     public function edit($id)
@@ -73,14 +81,24 @@ class Pembayaran extends Component
         ]);
 
         $this->resetInput();
-        session()->flash('message', 'Data Metode Pembayaran Berhasil Diubah');
+        $this->alert('success', 'Berhasil Diubah!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
 
     }
 
     public function destroy($id)
     {
         MetodePembayaranTbl::find($id)->delete();
-        session()->flash('message', 'Data Metode Pembayaran Berhasil Dihapus');
+        $this->alert('success', 'Berhasil Dihapus!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
 
     }
 

@@ -5,12 +5,15 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\LayananTbl;
 use Livewire\WithPagination;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Layanan extends Component
 {
     public $id_layanan, $nama_layanan, $harga, $searchlayanan;
     public $updatemode = false;
     use WithPagination;
+    use LivewireAlert;
+
     protected $paginationTheme = 'bootstrap';
     protected $paginationName = 'Page';
     public function paginationView()
@@ -54,7 +57,12 @@ class Layanan extends Component
         ]);
 
         $this->resetInput();
-        session()->flash('message', 'Data Layanan Berhasil Ditambahkan');
+        $this->alert('success', 'Berhasil Ditambahkan!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
 
     public function edit($id)
@@ -79,14 +87,24 @@ class Layanan extends Component
         ]);
 
         $this->resetInput();
-        session()->flash('message', 'Data Layanan Berhasil Diubah');
+        $this->alert('success', 'Berhasil Diubah!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
 
     }
 
     public function destroy($id)
     {
         LayananTbl::find($id)->delete();
-        session()->flash('message', 'Data Layanan Berhasil Dihapus');
+        $this->alert('success', 'Berhasil Dihapus!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
 
     }
 

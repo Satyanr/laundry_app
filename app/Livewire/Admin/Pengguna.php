@@ -5,12 +5,15 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Pengguna extends Component
 {
     public $searchuser, $name, $email, $role, $password, $password_confirmation, $user_id;
     public $updateMode = false;
     use WithPagination;
+    use LivewireAlert;
+
     protected $paginationTheme = 'bootstrap';
     protected $paginationName = 'Page';
     public function paginationView()
@@ -54,7 +57,12 @@ class Pengguna extends Component
             'role' => $this->role,
             'password' => bcrypt($this->password),
         ]);
-        session()->flash('message', 'Pengguna berhasil ditambahkan');
+        $this->alert('success', 'Berhasil Ditambahkan!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
         $this->resetInput();
     }
     public function edit($id)
@@ -99,7 +107,12 @@ class Pengguna extends Component
             ]);
         }
         $this->updateMode = false;
-        session()->flash('message', 'Data Berhasil Di Edit');
+        $this->alert('success', 'Berhasil Diubah!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
         $this->resetInput();
     }
     public function cancel()
@@ -110,6 +123,11 @@ class Pengguna extends Component
     public function delete($id)
     {
         User::find($id)->delete();
-        session()->flash('message', 'Pengguna berhasil dihapus');
+        $this->alert('success', 'Berhasil Dihapus!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
 }
