@@ -10,7 +10,7 @@
 <body style="text-align: center;">
     <h2>Laundry SMKN 1 Ciamis</h2>
 
-    <img src="data:image/png;base64, {!! base64_encode(QrCode::size(200)->generate('http://google.com')) !!} "> <br
+    <img src="data:image/png;base64, {!! base64_encode(QrCode::size(200)->generate('https://github.com/satyanr')) !!} "> <br
 
     <div style="margin-left: 470px"> {!! $barcode !!} </div>
     <h4>Kode Laundry: {{ $code }}</h4>
