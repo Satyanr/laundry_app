@@ -22,6 +22,7 @@ Route::get('/', function () {
     return view('pages.home');
 });
 
+
 Auth::routes([
     'register' => false,
     'reset' => false,
@@ -41,6 +42,7 @@ Route::controller(ImpersonateController::class)->group(function () {
 
 Route::controller(PdfController::class)->group(function () {
     Route::get('orderan', 'orderan')->name('orderan');
+    Route::get('/barcode/{id}', 'barcode')->name('barcode');
 });
 
 Route::controller(Controller::class)->group(function () {

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\OrderTbl;
-use App\Models\LayananTbl;
 use App\Models\KonsumenTbl;
 use Livewire\WithPagination;
 use App\Models\PembayaranTbl;
 
-class Home extends Component
+class Dashboard extends Component
 {
     public $searchorder;
     use WithPagination;
@@ -26,10 +25,13 @@ class Home extends Component
     public function render()
     {
         $searchorder = '%' . $this->searchorder . '%';
-        return view('livewire.home', [
+        return view('livewire.admin.dashboard', [
+            'totalkonsumen' => KonsumenTbl::count(),
+            'totalmskbulann' => OrderTbl::whereMonth('created_at', date('m'))->sum('total_harga'),
+            'totalorder' => OrderTbl::whereMonth('created_at', date('m'))->count(),
             'orders' => OrderTbl::where('kode_laundry', 'LIKE', $searchorder)
                 ->orderBy('id', 'DESC')
-                ->paginate(3, ['*'], $this->paginationName),
+                ->paginate(5, ['*'], $this->paginationName),
         ]);
     }
 }

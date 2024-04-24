@@ -100,6 +100,11 @@
                                             <i class="fa fa-eye"></i> Detail
                                         </button>
                                     </li>
+                                    <li>
+                                        <a  class="btn btn-outline-primary border-0" href="{{route('barcode', $order->id)}}">
+                                            <i class="fa-solid fa-scroll"></i> Barcode
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </td>

@@ -77,47 +77,56 @@
                             </div>
                         </a>
                     </div>
-                    @if (auth()->user()->role == 'Admin')
+                    @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'Petugas')
+                        <div class="col d-flex me-2" style="margin-left: auto;">
+                            <a href="{{ route('transaksi') }}" class="btn btn-outline-light border-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <i class="fa-solid fa-repeat"></i>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        Transaksi
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endif
+                @endif
+                @if (auth()->user())
+                    @if (auth()->user()->role != 'Petugas')
+                        <div class="col d-flex me-2" style="margin-left: auto;">
+                            <a href="{{ route('dashboard') }}" class="btn btn-outline-light border-0" type="button">
+                                <div class="row">
+                                    <div class="col">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        Beranda
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endif
+                @else
                     <div class="col d-flex me-2" style="margin-left: auto;">
-                        <a href="{{ route('transaksi') }}" class="btn btn-outline-light border-0">
+                        <a href="{{ route('login') }}" class="btn btn-outline-light border-0" type="button">
                             <div class="row">
                                 <div class="col">
-                                    <i class="fa-solid fa-users-between-lines"></i>
+                                    <i class="fas fa-user"></i>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    Transaksi
+                                    Login
                                 </div>
                             </div>
                         </a>
                     </div>
-                    @endif
                 @endif
-                <div class="col d-flex me-2" style="margin-left: auto;">
-                    <a href="
-                    @if (auth()->user()) 
-                        @if (auth()->user()->role == 'Petugas') 
-                            {{ route('transaksi') }}
-                        @else
-                            {{ route('dashboard') }}
-                         @endif
-                    @else
-                        {{ route('home') }} 
-                    @endif "
-                        class="btn btn-outline-light border-0" type="button">
-                        <div class="row">
-                            <div class="col">
-                                <i class="fas fa-home"></i>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                Beranda
-                            </div>
-                        </div>
-                    </a>
-                </div>
             </div>
         </div>
     </div>

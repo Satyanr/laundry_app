@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\OrderTbl;
 use Illuminate\Http\Request;
+use Picqer\Barcode\BarcodeGeneratorHTML;
 
 class PdfController extends Controller
 {
@@ -29,5 +30,25 @@ class PdfController extends Controller
 
         return $pdf->stream();
 
+    }
+
+    public function barcode($id)
+    {
+        $code_laundry = OrderTbl::where('id', $id)->first()->kode_laundry;
+        $ttlbyr = OrderTbl::where('id', $id)->first()->total_harga;
+        $generatorHTML = new BarcodeGeneratorHTML();
+        $barcode = $generatorHTML->getBarcode('stytzy'.$id , $generatorHTML::TYPE_CODE_128);
+        
+        $data = [
+            'code' => $code_laundry,
+            'barcode' => $barcode,
+            'ttlbyr' => $ttlbyr,
+        ];
+
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.barcode', $data)->setPaper('a4', 'landscape');;
+
+        return $pdf->download('barcode'.$code_laundry.'.pdf');
     }
 }

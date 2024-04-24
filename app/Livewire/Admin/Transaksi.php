@@ -135,6 +135,8 @@ class Transaksi extends Component
 
         $this->resetInput();
         session()->flash('message', 'Orderan berhasil ditambahkan.');
+        
+        return redirect()->to('/barcode/' . $order->id);
     }
     public function edit($id)
     {
