@@ -17,25 +17,35 @@ class PdfController extends Controller
 
     public function orderan(Request $request)
     {
-        // $sttsbyr = $request->input('sttsbyr');
+        $sttsbyr = $request->input('sttsbyr');
         $status = $request->input('status');
         $start = Carbon::createFromFormat('Y-m-d', $request->input('start'));
         $end = Carbon::createFromFormat('Y-m-d', $request->input('end'));
-        // if ($sttsbyr != null) {
-        //     if ($start == $end) {
-        //         $orderan = OrderTbl::whereDate('order_tbls.created_at', $start)->join('pembayaran_tbls', 'pembayaran_tbls.status_pembayaran')->where('pembayaran_tbls.status_pembayaran', $sttsbyr)->get();
-        //     } else {
-        //         $orderan = OrderTbl::whereBetween('order_tbls.created_at', [$start, $end])
-        //             ->join('pembayaran_tbls.status_pembayaran', $sttsbyr)
-        //             ->get();
-        //     }
-        // } elseif ($status != null) {
-        if ($status != null) {
+        if ($sttsbyr != null && $status != null) {
+            if ($start == $end) {
+                $orderan = OrderTbl::whereDate('order_tbls.created_at', $start)->where('status', $status)->join('pembayaran_tbls', 'pembayaran_tbls.id_orders', '=', 'order_tbls.id')->where('pembayaran_tbls.status_pembayaran', $sttsbyr)->get();
+            } else {
+                $orderan = OrderTbl::whereBetween('order_tbls.created_at', [$start, $end])
+                    ->where('status', $status)
+                    ->join('pembayaran_tbls', 'pembayaran_tbls.id_orders', '=', 'order_tbls.id')
+                    ->where('pembayaran_tbls.status_pembayaran', $sttsbyr)
+                    ->get();
+            }
+        } elseif ($status != null) {
             if ($start == $end) {
                 $orderan = OrderTbl::whereDate('created_at', $start)->where('status', $status)->get();
             } else {
                 $orderan = OrderTbl::whereBetween('created_at', [$start, $end])
                     ->where('status', $status)
+                    ->get();
+            }
+        } elseif ($sttsbyr != null) {
+            if ($start == $end) {
+                $orderan = OrderTbl::whereDate('order_tbls.created_at', $start)->join('pembayaran_tbls', 'pembayaran_tbls.id_orders', '=', 'order_tbls.id')->where('pembayaran_tbls.status_pembayaran', $sttsbyr)->get();
+            } else {
+                $orderan = OrderTbl::whereBetween('order_tbls.created_at', [$start, $end])
+                    ->join('pembayaran_tbls', 'pembayaran_tbls.id_orders', '=', 'order_tbls.id')
+                    ->where('pembayaran_tbls.status_pembayaran', $sttsbyr)
                     ->get();
             }
         } else {
@@ -70,8 +80,8 @@ class PdfController extends Controller
         ];
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('pdf.barcode', $data)->setPaper('a4', 'landscape');
+        $pdf->loadView('pdf.barcode', $data)->setPaper([0, 0, 500, 279], 'landscape');
 
-        return $pdf->download('barcode' . $code_laundry . '.pdf');
+        return $pdf->stream('barcode' . $code_laundry . '.pdf');
     }
 }

@@ -192,13 +192,13 @@
                                     <option value="diambil">Diambil</option>
                                 </select>
                             </div>
-                            {{-- <div class="col-auto">
+                            <div class="col-auto">
                                 <select class="form-select my-2" aria-label="Default select example" name="sttsbyr">
                                     <option selected value="">Status Pembayaran</option>
                                     <option value="lunas">Lunas</option>
                                     <option value="belum lunas">Belum Lunas</option>
                                 </select>
-                            </div> --}}
+                            </div>
                         </div>
                         <div class="input-group mb-3">
                             <input type="date" class="form-control" name="start" id="start" required>
