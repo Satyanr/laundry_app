@@ -19,7 +19,7 @@ class Transaksi extends Component
         $listmode = false,
         $detailon = false;
 
-    public $konsumenlist,
+    public $konsumenlist, $searchkonsumen,
         $konsumen_id,
         $showresult = false;
 
@@ -51,6 +51,10 @@ class Transaksi extends Component
         return view('livewire.admin.transaksi', [
             'orders' => OrderTbl::where('kode_laundry', 'LIKE', $searchorder)
                 ->where('status', 'LIKE', $filterorder)
+                ->whereHas('konsumen', function ($query) {
+                    $searchkonsumen = '%' . $this->searchkonsumen . '%';
+                    $query->where('nama', 'LIKE', $searchkonsumen);
+                })
                 ->whereHas('pembayaran', function ($query) {
                     $filterbyr = '%' . $this->filterbyr . '%';
                     $query->where('status_pembayaran', 'LIKE', $filterbyr);

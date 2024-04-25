@@ -50,7 +50,12 @@
             @endforeach
             @php
                 $totalPendapatan = $orders->sum('total_harga');
+                $totalBelumLunas = $orders->where('pembayaran.status_pembayaran', 'belum lunas')->sum('total_harga');
             @endphp
+            <tr>
+                <td colspan="9" style="text-align: right;"><h4 style="padding-right: 5%;">Total Belum Lunas:</h4></td>
+                <td>{{ 'Rp' . number_format($totalBelumLunas, 0, ',', '.') }}</td>
+            </tr>
             <tr>
                 <td colspan="9" style="text-align: right;"><h4 style="padding-right: 5%;">Total Pendapatan:</h4></td>
                 <td>{{ 'Rp' . number_format($totalPendapatan, 0, ',', '.') }}</td>

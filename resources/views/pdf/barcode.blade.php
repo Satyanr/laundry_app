@@ -10,9 +10,7 @@
 <body style="text-align: center;">
     <h2>Laundry SMKN 1 Ciamis</h2>
 
-    <img src="data:image/png;base64, {!! base64_encode(QrCode::size(200)->generate('https://github.com/satyanr')) !!} "> <br
-
-    <div style="margin-left: 470px"> {!! $barcode !!} </div>
+    <img src="data:image/png;base64, {!! base64_encode(QrCode::size(200)->generate('http://localhost:8000/info-laundryan/'.$code.'')) !!} "> <br>
     <h4>Kode Laundry: {{ $code }}</h4>
     <h4>Total Bayar: {{ 'Rp ' . number_format($ttlbyr, 0, ',', '.') }}</h4>
 

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImpersonateController;
+use App\Http\Controllers\InfoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ use App\Http\Controllers\ImpersonateController;
 Route::get('/', function () {
     return view('pages.home');
 });
+Route::get('/info-laundryan/{kode_laundry}',  [InfoController::class, 'infoLaundryan']);
 
 Auth::routes([
     'register' => false,
