@@ -51,6 +51,6 @@ class PdfController extends Controller
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('pdf.barcode', $data)->setPaper('a4', 'landscape');
 
-        return $pdf->stream('barcode' . $code_laundry . '.pdf');
+        return $pdf->download('barcode' . $code_laundry . '.pdf');
     }
 }

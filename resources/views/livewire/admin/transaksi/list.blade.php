@@ -22,6 +22,23 @@
                 aria-describedby="basic-addon1" wire:model='searchorder' wire:input='resetPageOrder'>
         </div>
     </div>
+    <div class="col-auto">
+        <select class="form-select mt-4" aria-label="Default select example" wire:model='filterorder'
+            wire:change='resetPageOrder'>
+            <option selected value="">Pilih Status</option>
+            <option value="Baru">Baru</option>
+            <option value="Proses">Proses</option>
+            <option value="Selesai">Selesai</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <div class="form-check mt-4">
+            <input class="form-check-input" type="checkbox" value="Belum Lunas" id="flexCheckDefault" wire:click='setValueStatus' wire:click='resetPageOrder'>
+            <label class="form-check-label" for="flexCheckDefault">
+                Belum Lunas
+            </label>
+          </div>
+    </div>
 </div>
 <div class="row mt-3">
     <div class="col" style="margin-left: auto">

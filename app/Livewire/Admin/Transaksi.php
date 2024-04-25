@@ -14,7 +14,7 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Transaksi extends Component
 {
-    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status, $uang_bayar, $kembalian, $layanan, $laundrycode, $sttsbyr, $mtdbyr;
+    public $id_konsumen, $id_layanan, $nama, $no_telp, $jumlah, $total, $searchorder, $orderan_id, $status, $uang_bayar, $kembalian, $layanan, $laundrycode, $sttsbyr, $mtdbyr, $filterorder, $filterbyr;
     public $updatemode = false,
         $listmode = false,
         $detailon = false;
@@ -35,16 +35,30 @@ class Transaksi extends Component
     {
         $this->gotoPage(1, 'Page');
     }
+    public function setValueStatus()
+    {
+        if ($this->filterbyr != 'Belum Lunas') {
+            $this->filterbyr = 'Belum Lunas';
+        } else {
+            $this->filterbyr = '';
+        }
+    }
     public function render()
     {
         $searchorder = '%' . $this->searchorder . '%';
+        $filterorder = '%' . $this->filterorder . '%';
+
         return view('livewire.admin.transaksi', [
             'orders' => OrderTbl::where('kode_laundry', 'LIKE', $searchorder)
-                ->orWhere('status', 'LIKE', $searchorder)
+                ->where('status', 'LIKE', $filterorder)
+                ->whereHas('pembayaran', function ($query) {
+                    $filterbyr = '%' . $this->filterbyr . '%';
+                    $query->where('status_pembayaran', 'LIKE', $filterbyr);
+                })
                 ->orderBy('id', 'DESC')
                 ->paginate(5, ['*'], $this->paginationName),
             'layanans' => LayananTbl::all(),
-            'mtdbyrs'=> MetodePembayaranTbl::all(),
+            'mtdbyrs' => MetodePembayaranTbl::all(),
             'statusBelumDiambilCount' => OrderTbl::where('status', 'selesai')->count(),
             'statusProsesCount' => OrderTbl::where('status', 'proses')->count(),
         ]);
@@ -143,7 +157,7 @@ class Transaksi extends Component
             'toast' => false,
             'timerProgressBar' => true,
         ]);
-        
+
         return redirect()->to('/barcode/' . $order->id);
     }
     public function edit($id)
@@ -234,7 +248,6 @@ class Transaksi extends Component
         $layanan = LayananTbl::find($order->id_layanans);
         $this->layanan = $layanan->nama_layanan;
         $this->sttsbyr = PembayaranTbl::where('id_orders', $order->id)->first()->status_pembayaran;
-
     }
 
     public function updatestatus()
@@ -260,7 +273,7 @@ class Transaksi extends Component
             ],
         );
 
-        if ($this->mtdbyr == null){
+        if ($this->mtdbyr == null) {
             $this->mtdbyr = 'cash';
         }
 

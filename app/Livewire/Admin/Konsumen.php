@@ -63,11 +63,23 @@ class Konsumen extends Component
         }
         $this->resetInput();
         $this->updateMode = false;
+        $this->alert('success', 'Berhasil Diubah!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
     public function destroy($id)
     {
         $konsumen = KonsumenTbl::find($id);
         $konsumen->delete();
+        $this->alert('success', 'Berhasil Dihapus!', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => false,
+            'timerProgressBar' => true,
+        ]);
     }
 
     public function cancel()
