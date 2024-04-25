@@ -110,11 +110,18 @@
                 </div>
                 <div class="col-auto">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="Belum Lunas" id="flexCheckDefault" wire:click='setValueStatus' wire:click='resetPageOrder'>
+                        <input class="form-check-input" type="checkbox" value="Belum Lunas" id="flexCheckDefault"
+                            wire:click='setValueStatus' wire:click='resetPageOrder'>
                         <label class="form-check-label" for="flexCheckDefault">
                             Belum Lunas
                         </label>
-                      </div>
+                    </div>
+                </div>
+                <div class="col-auto" style="margin-left: auto;">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        Buat Laporan
+                    </button>
                 </div>
             </div>
             <div class="row mt-3">
@@ -160,6 +167,47 @@
             <div class="row">
                 <div class="col">
                     {{ $orders->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Buat Laporan</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('orderan') }}" method="GET">
+                        <div class="row">
+                            <div class="col-auto">
+                                <select class="form-select my-2" aria-label="Default select example" name="status">
+                                    <option selected value="">Pilih Status</option>
+                                    <option value="baru">Baru</option>
+                                    <option value="proses">Proses</option>
+                                    <option value="selesai">Selesai</option>
+                                    <option value="diambil">Diambil</option>
+                                </select>
+                            </div>
+                            {{-- <div class="col-auto">
+                                <select class="form-select my-2" aria-label="Default select example" name="sttsbyr">
+                                    <option selected value="">Status Pembayaran</option>
+                                    <option value="lunas">Lunas</option>
+                                    <option value="belum lunas">Belum Lunas</option>
+                                </select>
+                            </div> --}}
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="date" class="form-control" name="start" id="start" required>
+                            <span class="input-group-text">to</span>
+                            <input type="date" class="form-control" name="end" id="end" required>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-print"></i>
+                                Print</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

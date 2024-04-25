@@ -12,7 +12,9 @@
 
     <img src="data:image/png;base64, {!! base64_encode(QrCode::size(200)->generate('http://localhost:8000/info-laundryan/'.$code.'')) !!} "> <br>
     <h4>Kode Laundry: {{ $code }}</h4>
-    <h4>Total Bayar: {{ 'Rp ' . number_format($ttlbyr, 0, ',', '.') }}</h4>
+    <h4>Total Bayar: {{ 'Rp ' . number_format($order->total_harga, 0, ',', '.') }}</h4>
+    <h4>Jumlah : {{$order->jumlah}}</h4>
+    <h4>Layanan : {{$order->layanan->nama_layanan}}</h4>
 
     
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" ></script>
